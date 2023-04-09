@@ -1,0 +1,205 @@
+<!-- here in login and registration form hmne apne website pr koi bhi secruity add nhi kri  koi agr mera
+koi db hack krleta toh unhe hmari email and password pta lgjega-->
+
+<!-- for this we weill use bcrypt(hashing algorithm) -->
+
+<!-- diiference b/w encryption and hashing dono kaam yhi hai ki password secure krna
+bt encryption ko mostely encode and decode main define krte  also called two way communication here in
+encryption let pass is thapa when encoded it gets value asdgs jaise hmne is pass ko encode krra hm isse decode bhi 
+kr skte  thats why two way so hackeer kya krega decode krdega us value ko so its not safe-->
+
+<!-- so instead of encryption we will use hash algo  it is one way communication-->
+<!-- ismei agr ek baar hmne encode krra then hm isee dobara decode nhi kr skte -->
+
+<!-- types of hsshing algo  -->
+<!-- 1. MDS:-   hacker will take 2s for hacking our site
+     2. SHA-1:- 5s
+     3.RIPOMD-160:- 7s
+     4.SHA-256:- 11s
+     5. SHA-512:- 37s
+     6. SHA-3(kockack) :- 49s
+     7.whirlpool:- 3min
+     8.bycrypt(4 rounds):- 159d
+     9.bycrypt(12 rounds):- >3y
+    open md5 cracker for getting encoded data and put that encoded dtaa on website agin we get the name of origninal data
+
+
+    -----for bcrypting password use bcrypt.js------ 
+    const bcrypt=require('bcrypt')
+
+    const securepassword=async(password)=>{
+      //here while registering 
+      const passhash=await bcrypt.hash(password,salt)    //here salt is  rounds by defualt 10 rounds jitne rounds utna secure
+      console.log(passhash)                              //here passhash is that password jo db pr store hai and comapre main 1st password jo user login time enter krega
+     
+     //here while login to confirm password
+      const compare=await bcrypt.compare(password,passhash)     //to compare if two passwords are same ie at db and while login  1st is that i am putting 2nd is that is already presnt on db
+    }
+    securepassword('1234')
+
+
+
+    ----in registers call this pre mthod before creating collectiion   74th 75th video-----
+    
+    employeeSchema.pre("save",async function(next){
+    //means is save method ko call krne se pele ek fxn run krna that hashes the password
+    // console.log(`ration hash is ${this.ration}`) //while registering and will be stored at db
+    if(this.isModified("ration"))                   //if he want to modify password
+    {
+        console.log(`ration hash is ${this.ration}`)
+        const ans=await bcrypt.hash(this.ration,10)
+        console.log(ans)
+    }
+    next();
+    //here call next fxn that saves the data at db
+})
+//pre mthod that works as middleware 
+
+
+
+
+    pre mthod means pele and post means baad menas ,pre here means save method ko call krne se pele, it takes 2 arguments , 1st argument is event mtlb kis event ko call krne se pele and 2nd argument is fxn that has to be run before save met/hod
+
+
+
+
+
+
+
+
+
+
+    -->
+
+
+
+    <!-- nodejs cookies or jsonwebtoken -->
+    <!-- json web token is used to create access tokens for web application
+ it works this way : the server generates a token that certifies the user identity and sends it to client-->
+ <!-- if i want to generate unique token with hlp of jwt use methos jwt.sign bsically mujhe ek signature generate
+krwana and next time jb main pg pr visit kurngi then hmara browser signature ko verify krega if hmara signature mtch hojata
+ means i am a genuine user 
+ in jwt sign i have to pass two argumants 1st is object 2nd is string(secret key) ,in object i have to pass payload payload means jo body ka data hai and
+basically hm object k and whi chiz pass kenge jo hmare lie unique ho
+  -->
+
+  <!-- let example main amazon ki site pr visit krri first time login krra mne prdodct select kre in the cart jb sara
+close krdia ferse dobara amazon ki sie kholi then mujhe apne cat main mere slect kre products show hore without login again browser ko ksepta jitne mere procuts cart main the pele utne hi hain this is bcz of 
+cookies cookies k andr mere amzon pr kya kra mne kya nhi sb uspe stored hai un cookies k andr jo data store hora
+us browser ko malum hai ki main uski website k sath kya krri thi -->
+
+<!-- ab amazon ko kaise pta lgega ki user genuine hai ki nhi ho skta hme woh info kisi aur ko na dikhani ho
+hme ensure krna ki jis user ne yeh prdocts pele se addtocart pr save krke rkhe the whi user hai ab so with hlp of 
+aunthetication yeh genuine user find kr skte yeh aunthntication hm rkte with hlp of jwt -->
+
+<!-- jwt is like encoded code jo hmare yeh cookies k sath attach rete this json web token is unique for every user 
+and with hlp of this web token hmare broswwer ko yeh pta reta ki yeh whi user hai jisne yehh prodcts list
+krre the -->
+
+
+
+
+<!-- how it works -->
+<!-- jbhi hm kuch bhi request krte over https us vkt hme server unique token provide krwata with hlp of jwt
+and yeh token client k pas hi reta and jb bhi user kuch bhi server pr request krta us req main yeh token bhi
+attaxh reta us request sath and is token ko dkhke server btadeta this is a genuine user -->
+
+<!-- jb user first time register krra main uske lie jwt ka token create krari  so that next time mujhe jb login krna pde, after that if that toen that is generated is valid tbhi hm us page ko show kraenege-->
+<!-- with hlp of secret key dusra user yeh claim nhi kr skta ki i am that same user it is of max 32 chaacters
+ -->
+
+ <!-- yeh jo token rhega user k pass hi rhega server k pas koi data nhi rhega thats why it is called state list
+server ko koi idea nhi yeh kya hai kya chhata hai  -->
+
+<!-- and to verify ki jo token generate hua and when jb user req krega using http server will verify paricular token
+ko chq krta agr verify hojata then hmara yeh previous data ko btadeta ki hnn yeh whi user hai isee apna purana data dikhado-->
+
+<!-- here 3rd paramater is expiresIn means kitne sec ya min baad yeh token expire krna its like bank website ki 30 sec baad hm is website se logout hojenge
+hmko bolega dobara login krne k lie -->
+
+
+<!-- here hme save krne se pele aur register krne k baad token genertae krna -->
+
+<!-- how to make code even more secure using .env package
+  when we try to upload our code on git then if 2nd person see that page then he can see my secret key
+
+-->
+
+
+<!-- 
+
+
+
+
+const jwt=require('jsonwebtoken')
+
+
+const creattoken=async()=>{
+ const token =await jwt.sign({_id:393930999999},"arshnoorkaur",{expiresIn:"2 seconds"})     //1st argu is object)(payload:- we pass that thing which is unique for us, example id) and 2nd is string(secret key) , here isee hm token generate krare so that next time when we visit that page that token will be vrified  and 3rd argument is kb yeh token expire hoga jise ferse user ko loginkrna pdega
+ console.log(token)
+ const userverify=await jwt.verify(token,"arshnoorkaur")
+ console.log(userverify) //if we here get id then its authentic user
+ //here user passed token to  server when requested for page , and server will verify that yeh whi token hai jo is page ka owner hai
+}
+createtoken()
+
+
+//with help of secret key koi baaki dusra claim nhi kr skta main same person hu dusra wala nhi, min 32 characters secret key
+//here token is divided into 3 parts:- 1st is header which consist of which algo is used in this and type of token(jwt)
+//2nd is paylod which consisit of unique id
+//3rd is verify signature :- 
+
+
+
+
+
+process.env used when hmne apne codes ko rest duniya se chupkae rkhna
+
+
+
+----cookies----
+cookies are snall files which are stored on users computer . they are designed to store the a modest amount of data specific to particular client and server.
+and can be accessed by web server or client computer
+
+res.cookie() is used to set cookie name to value . the value parameter may be string or object converted to json
+syntax: res.cookie(name,value,[options])
+
+res.cookie()
+
+here name i ll give by my choice 
+here value i ll give token value
+
+
+here i attached token value to cookie easily and next time login krne wkt valid token hai ki nhi simply i ll check cookie value and uske basis pr user validate krungi user authenticated hai kinhi and us page ka access den ki nhi
+
+httponly means clientside scripting lang like javascript cookie value ko kuch bhi nhi kr skta na chng kr skta na remove kr skta  manually hora bt not js lang
+
+let i visit icte website after 10 or 20 min website dobara bolti login krne ko bcz cookie ka expiry time aajata and token k basis pr hm page ko access krare and jb token hi hogya expire then hme woh automatically logout krwadeta
+
+
+cookie parser used to get cookie value and to verify cookie  value
+here cookie parser works as middleware 
+
+ -->
+
+ eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzMxZmFmYTUwNGYyM2VhNGZiMmJhZmEiLCJpYXQiOjE2NjQyMTk4OTh9.yT3Vxu2F4xCNMDvKkk7fQ6Bi9lu5dnLonHyKkPmd1Tg
+
+
+ <!-- static are the methoda defined on the model and methods are defined on document 
+use static for static methods and use methods for instance methods  -->
+
+<!--  expires:new Date(Date.now()+30000),
+            httpOnly:true 
+            //jis time token generate hota us time kya date.now() + after 30sec this cookie will be expired
+        }) -->
+
+
+<!-- jis time store krare usi time hm generate bhi krare then yhe shi nhi hm chhate hme generate tbhi krna jb user 1st time login ya register krta so that 
+next time jb user pages ko open krna chahega jo authenticated hai usi ko show hoga that particular page
+let here mujhe hospitalizaion page pr visit krna after verfiy page then pele hme us token ko get krke usee verify krna
+let mera hospital page private(secret) page hai jisee main visit krna chahti-->
+
+<!-- we know ek baar user ne login aur register krdia then hm token generate krre then us token ko
+verify krna ki user genuine hai ki nhi aur is token ko main store bhi krari thi apne browser pr -->
+
+<!-- if user genuine then we will render hospital page by running next function in auth else it will not render by telling this that it is invalid token, we will just add auth that chqs ki user genuine hai ki nhi -->

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="css/loginstyle.css">
+	<title>Input Image With Preview Image</title>
+</head>
+<body>
+  <div class="container">
+    <div class="title">Personal Info</div>
+    <div class="container1">
+		<input type="file" id="file" accept="image/*" hidden>
+        <span class="details">
+            Proof of identity
+            <div class="img-area" data-img="">
+			<i class='bx bxs-cloud-upload icon'></i>
+			<h3>Upload Image</h3>
+		</div>
+        </span>
+		<button class="select-image">Select Image</button>
+	</div>
+    <div class="content">
+      <form action="/login" autocomplete="off">
+        <div class="user-details">
+          <div class="input-box">
+            <span class="details">Income</span>
+            <input type="text" placeholder="Enter your income" name="income" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Caste</span>
+            <input type="text" placeholder="Enter your caste" name="caste" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Contact Info</span>
+            <input type="number" placeholder="Enter your contact info" name="contact" required>
+          </div>
+          <div class="input-box">
+            <span class="details">Family Structure</span>
+            <input type="text" placeholder="Enter your family strcture" required>
+          </div>
+        </div>
+        <div class="button">
+          <input type="submit" value="Next">
+        </div>
+      </form>
+    </div>
+  </div>
+
+</body>
+</html>
+
+	<script src="js/main.js"></script>
+</body>
+</html>
